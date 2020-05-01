@@ -1,0 +1,9 @@
+{
+  "name": "eslint-config-internal",
+  "version": "1.0.0",
+  "description": "ESLint-config for the offline first TODO app",
+  "main": "index.js",
+  "author": "Dmitry Shuvalov <iamshuvalov@yandex.ru>",
+  "license": "MIT",
+  "private": true
+}
