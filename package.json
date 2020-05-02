@@ -20,7 +20,9 @@
     ]
   },
   "scripts": {
-    "lint": "yarn eslint --config .eslintrc.js --ignore-path .eslintignore ."
+    "build": "lerna run build",
+    "lint": "yarn eslint --config .eslintrc.js --ignore-path .eslintignore .",
+    "start": "lerna run --parallel start"
   },
   "husky": {
     "hooks": {
