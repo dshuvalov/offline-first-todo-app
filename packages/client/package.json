@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "Client for the offline first TODO app",
   "author": "Dmitry Shuvalov <iamshuvalov@yandex.ru>",
   "license": "MIT",
