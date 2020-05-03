@@ -128,5 +128,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "flow-bin": "^0.123.0",
+    "flow-typed": "^2.6.2"
   }
 }
