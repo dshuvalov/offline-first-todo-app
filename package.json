@@ -21,8 +21,9 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "lint": "yarn eslint --config .eslintrc.js --ignore-path .eslintignore .",
-    "start": "lerna run --parallel start"
+    "lint": "eslint --config .eslintrc.js --ignore-path .eslintignore .",
+    "start": "lerna run start",
+    "clean": "lerna clean -y && rm -rf node_modules/ && yarn install && yarn lerna bootstrap"
   },
   "husky": {
     "hooks": {
