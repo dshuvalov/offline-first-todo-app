@@ -1,25 +1,35 @@
-import React from 'react'
-import logo from './logo.svg'
-import './App.css'
+// @flow
 
-function App() {
+import React, { Fragment } from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { IDBProvider } from '../controllers/IDBProvider'
+import { TodoList } from '../routes/TodoList'
+// import logo from './logo.svg'
+
+const DependentProviders = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route exact path="/" component={TodoList} />
+      {/* <Route
+            path="/todo/:todoId"
+            render={({ history, location: { pathname }, match }) => (
+              <TodoCard params={getParams(pathname, paths)} match={match} history={history} />
+            )}
+          /> */}
+    </Switch>
+  )
+}
+
+const App = () => {
+  return (
+    <Fragment>
+      <h1>todos</h1>
+      <Router>
+        <IDBProvider>
+          <DependentProviders />
+        </IDBProvider>
+      </Router>
+    </Fragment>
   )
 }
 
