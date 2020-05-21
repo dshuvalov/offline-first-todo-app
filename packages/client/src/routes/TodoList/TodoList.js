@@ -3,9 +3,12 @@
 import React, { Fragment, useState, useCallback, useMemo } from 'react'
 // $FlowFixMe
 import { nanoid } from 'nanoid'
-import { useIDBProvider } from '../../controllers/IDBProvider'
+import {
+  useGlobalStateProvider,
+  type TodoTask,
+  addTodoTask,
+} from '../../controllers/GlobalStateProvider'
 import { Input } from '../../components/Input'
-import type { TodoTask } from '../../controllers/IDBProvider'
 import { TodoListItem } from './TodoListItem'
 
 import './TodoList.css'
@@ -24,9 +27,9 @@ const generateTodoTask = (title, orderNumber): TodoTask => {
 
 export const TodoList = React.memo<null>(function TodoList() {
   const [newTodoTitle, setNewTodoTitle] = useState<string>('')
-  const { store, pushValue } = useIDBProvider()
+  const { state, dispatch } = useGlobalStateProvider()
 
-  const todoTasks = useMemo(() => store.todoTasks, [store])
+  const todoTasks = useMemo(() => state.todoTasks, [state])
   const todoTasksCount = useMemo(() => todoTasks.length, [todoTasks])
 
   const handleChangeTodoTitle = useCallback(event => {
@@ -40,10 +43,10 @@ export const TodoList = React.memo<null>(function TodoList() {
       if (event.which === 13 && trimmedNewTodoTitle.length !== 0) {
         const newTodoTask = generateTodoTask(trimmedNewTodoTitle, todoTasksCount)
         setNewTodoTitle('')
-        pushValue('TodoTasks', ['todoTasks'], newTodoTask)
+        addTodoTask(newTodoTask, dispatch)
       }
     },
-    [newTodoTitle, pushValue, todoTasksCount],
+    [dispatch, newTodoTitle, todoTasksCount],
   )
 
   return (
