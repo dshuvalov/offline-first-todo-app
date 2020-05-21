@@ -21,8 +21,9 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "lint": "yarn eslint --config .eslintrc.js --ignore-path .eslintignore .",
-    "start": "lerna run --parallel start"
+    "lint": "eslint --config .eslintrc.js --ignore-path .eslintignore .",
+    "start": "lerna run start",
+    "clean": "lerna clean -y && rm -rf node_modules/ && yarn install && yarn lerna bootstrap"
   },
   "husky": {
     "hooks": {
@@ -44,7 +45,6 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
     "eslint": "^6.8.0",
-    "flow-bin": "^0.123.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
