@@ -14,21 +14,20 @@ const logWarning = () => {
 }
 
 export type IDBProviderContextType = {|
-  store: IDBProviderValues | null,
+  store: IDBProviderValues,
   // changeValue: (pathToValue: PathToValueOrArray, value: mixed) => void,
   pushValue: (
     idbObjectStoreName: IDBObjectStoreName,
     pathToArray: PathToValueOrArray,
     value: mixed,
   ) => void,
-  // deleteValue: (pathToArray: PathToValueOrArray, index: number) => void,
 |}
 
 const defaultContext: IDBProviderContextType = {
-  store: null,
-  // changeValue: logWarning,
+  store: {
+    todoTasks: [],
+  },
   pushValue: logWarning,
-  // deleteValue: logWarning,
 }
 
 export const IDBProviderContext = React.createContext<IDBProviderContextType>(defaultContext)
