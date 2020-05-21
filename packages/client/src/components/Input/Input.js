@@ -7,8 +7,8 @@ type Props = {|
   value: string,
   className?: string,
   placeholder?: string,
-  onChange?: (value: string, event: SyntheticEvent<HTMLInputElement>) => void,
-  onKeyDown?: (event: SyntheticKeyboardEvent<>) => void,
+  onChange?: (event: SyntheticInputEvent<HTMLInputElement>) => void,
+  onKeyDown?: (event: SyntheticKeyboardEvent<HTMLInputElement>) => void,
 |}
 
 export const Input = (props: Props) => {
