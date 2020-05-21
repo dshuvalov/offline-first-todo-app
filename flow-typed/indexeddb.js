@@ -25,3 +25,13 @@ declare interface IDBObjectStore {
   put(value: any, key?: any): IDBRequest;
   transaction: IDBTransaction;
 }
+
+declare interface IDBRequest extends EventTarget {
+  result: any;
+  error: Error;
+  source: ?(IDBIndex | IDBObjectStore | IDBCursor);
+  transaction: IDBTransaction;
+  readyState: 'pending' | 'done';
+  onerror: (err: any) => mixed;
+  onsuccess: (e: any) => mixed;
+}
