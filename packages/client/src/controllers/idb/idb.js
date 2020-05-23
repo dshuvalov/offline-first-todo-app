@@ -1,6 +1,12 @@
 // @flow
 
-import type { InitIDBFn, GetAllIDBFn, PushIDBValueFn } from './types'
+import type {
+  InitIDBFn,
+  GetAllIDBFn,
+  PushIDBValueFn,
+  ChangeIDBValueFn,
+  DeleteIDBValueFn,
+} from './types'
 
 const availableObjectStoreList = ['TodoTasks']
 let db: IDBDatabase
@@ -25,7 +31,6 @@ const initIDB: InitIDBFn = () =>
     }
 
     openRequest.onsuccess = function onsuccess() {
-      console.log('openRequest', openRequest)
       db = openRequest.result
 
       db.onversionchange = function onversionchange() {
@@ -69,29 +74,6 @@ const getAll: GetAllIDBFn = objectStoreName =>
     }
   })
 
-// type ChangeIDBValueFn = (
-//   objectStoreName: IDBObjectStoreName,
-//   value: mixed,
-//   (err: IDBRequestErrorResponse | null, res: IDBRequestSuccessResponse | null) => void,
-// ) => void
-
-// const changeIDBValue: ChangeIDBValueFn = (objectStoreName, value, callback) => {
-//   const transaction = db.transaction(objectStoreName, 'readwrite')
-//   const objectStore = transaction.objectStore(objectStoreName)
-
-//   const request = objectStore.put(value)
-
-//   transaction.oncomplete = function () {
-//     console.log(request)
-//     console.log(transaction)
-//     callback(null, { status: 'success' })
-//   }
-
-//   transaction.onerror = function () {
-//     callback({ status: 'error' }, null)
-//   }
-// }
-
 const pushIDBValue: PushIDBValueFn = (objectStoreName, value) =>
   new Promise((resolve, reject) => {
     const transaction = db.transaction(objectStoreName, 'readwrite')
@@ -103,34 +85,47 @@ const pushIDBValue: PushIDBValueFn = (objectStoreName, value) =>
       resolve({ status: 'success', data: null })
     }
 
-    transaction.onerror = function onerror(event) {
+    transaction.onerror = function onerror() {
       const { error } = transaction
-      console.log('error event', event.target.result)
-      console.log('error transaction', transaction.error)
 
       reject(error)
     }
   })
 
-// type DeleteIDBValueFn = (
-//   objectStoreName: IDBObjectStoreName,
-//   value: mixed,
-//   callback: TransactionCallback,
-// ) => void
+const changeIDBValue: ChangeIDBValueFn = (objectStoreName, value) =>
+  new Promise((resolve, reject) => {
+    const transaction = db.transaction(objectStoreName, 'readwrite')
+    const objectStore = transaction.objectStore(objectStoreName)
 
-// const deleteIDBValue: DeleteIDBValueFn = (objectStoreName, id, callback) => {
-//   const transaction = db.transaction(objectStoreName, 'readwrite')
-//   const objectStore = transaction.objectStore(objectStoreName)
+    objectStore.put(value)
 
-//   objectStore.delete(id)
+    transaction.oncomplete = function oncomplete() {
+      resolve({ status: 'success', data: null })
+    }
 
-//   transaction.oncomplete = function () {
-//     callback(null, { status: 'success' })
-//   }
+    transaction.onerror = function onerror() {
+      const { error } = transaction
 
-//   transaction.onerror = function () {
-//     callback({ status: 'error', error: transaction.error }, null)
-//   }
-// }
+      reject(error)
+    }
+  })
 
-export const idb = { initIDB, getAll, pushIDBValue }
+const deleteIDBValue: DeleteIDBValueFn = (objectStoreName, id) =>
+  new Promise((resolve, reject) => {
+    const transaction = db.transaction(objectStoreName, 'readwrite')
+    const objectStore = transaction.objectStore(objectStoreName)
+
+    objectStore.delete(id)
+
+    transaction.oncomplete = function oncomplete() {
+      resolve({ status: 'success', data: null })
+    }
+
+    transaction.onerror = function onerror() {
+      const { error } = transaction
+
+      reject(error)
+    }
+  })
+
+export const idb = { initIDB, getAll, pushIDBValue, changeIDBValue, deleteIDBValue }

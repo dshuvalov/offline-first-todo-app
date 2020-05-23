@@ -18,4 +18,14 @@ type PushIDBValueFn = (
   value: TodoTask,
 ) => IDBTransactionSuccessResponse<null> | IDBTransactionErrorResponse<Error>
 
-export type { InitIDBFn, GetAllIDBFn, PushIDBValueFn }
+type ChangeIDBValueFn = (
+  'TodoTasks',
+  value: TodoTask,
+) => IDBTransactionSuccessResponse<null> | IDBTransactionErrorResponse<Error>
+
+type DeleteIDBValueFn = (
+  'TodoTasks',
+  key: string,
+) => IDBTransactionSuccessResponse<null> | IDBTransactionErrorResponse<Error>
+
+export type { InitIDBFn, GetAllIDBFn, PushIDBValueFn, ChangeIDBValueFn, DeleteIDBValueFn }
