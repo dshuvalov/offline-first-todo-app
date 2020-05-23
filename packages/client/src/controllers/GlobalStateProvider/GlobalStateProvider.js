@@ -20,18 +20,14 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case ADD_TODO_TASK: {
-      const newState = pushValueByPath(state, ['todoTasks'], action.payload)
-      console.log('ADD_TODO_TASK', newState)
-      return { ...newState }
-    }
     case SET_TODO_TASKS: {
       const newState = changeValueByPath(state, ['todoTasks'], action.payload)
-      console.log('SET_TODO_TASKS', newState)
       return { ...newState }
     }
-    // case REMOVE_TODO_TASK:
-    //   return { count: state.count - 1 }
+    case ADD_TODO_TASK: {
+      const newState = pushValueByPath(state, ['todoTasks'], action.payload)
+      return { ...newState }
+    }
     default:
       return state
   }

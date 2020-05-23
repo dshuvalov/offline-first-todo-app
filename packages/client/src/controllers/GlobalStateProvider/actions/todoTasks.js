@@ -23,7 +23,7 @@ export const fetchTodoTasks = async (
     }
     return dispatch({ type: SET_TODO_TASKS, payload: [] })
   } catch (error) {
-    console.log(error)
+    console.warn(error)
     throw error
   }
 }
@@ -32,10 +32,12 @@ export const addTodoTask = async (todoTask: TodoTask, dispatch: Dispatch<AddTodo
   const { pushIDBValue } = idb
 
   try {
-    await pushIDBValue('TodoTasks', todoTask)
-    dispatch({ type: ADD_TODO_TASK, payload: todoTask })
+    const result = await pushIDBValue('TodoTasks', todoTask)
+    if (result.status === 'success') {
+      dispatch({ type: ADD_TODO_TASK, payload: todoTask })
+    }
   } catch (error) {
-    console.log(error)
+    console.warn(error)
     throw error
   }
 }
