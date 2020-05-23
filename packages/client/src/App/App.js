@@ -21,16 +21,10 @@ const DependentProviders = () => {
       fetchTodoTasks(dispatch)
     }
     populateDataToGlobalStateProvider()
-  }, [])
+  }, [dispatch])
   return (
     <Switch>
       <Route exact path="/" component={TodoList} />
-      {/* <Route
-            path="/todo/:todoId"
-            render={({ history, location: { pathname }, match }) => (
-              <TodoCard params={getParams(pathname, paths)} match={match} history={history} />
-            )}
-          /> */}
     </Switch>
   )
 }

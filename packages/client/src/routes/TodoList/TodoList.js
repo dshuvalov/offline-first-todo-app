@@ -13,8 +13,6 @@ import { TodoListItem } from './TodoListItem'
 
 import './TodoList.css'
 
-export type RemoveTodoFn = ({ todoId: string, todoIndex: number }) => void
-
 const generateTodoTask = (title, orderNumber): TodoTask => {
   return {
     id: nanoid(),

@@ -21,9 +21,13 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "clean": "lerna clean -y && rm -rf node_modules/",
+    "docker:clean": "docker rm $(docker ps -aq) && docker rmi -f $(docker images -q)",
     "lint": "eslint --config .eslintrc.js --ignore-path .eslintignore .",
-    "start": "lerna run start",
-    "clean": "lerna clean -y && rm -rf node_modules/ && yarn install && yarn lerna bootstrap"
+    "mongo:build-container": "docker image build -t offline-first-todo-app-db -f ./Dockerfile.db .",
+    "mongo:start": "docker container run -d -p 27017:27017 -v $(pwd)/data:/data/db offline-first-todo-app-db",
+    "refresh": "yarn clean && yarn install && yarn lerna bootstrap",
+    "start": "yarn mongo:start && yarn lerna run --parallel start"
   },
   "husky": {
     "hooks": {
@@ -41,10 +45,16 @@
   "dependencies": {
     "lerna": "^3.20.2"
   },
+  "engines": {
+    "node": ">=10.20.0",
+    "yarn": "^1.22.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-angular": "^8.3.4",
     "eslint": "^6.8.0",
+    "flow-bin": "^0.125.1",
+    "flow-typed": "^2.6.2",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
