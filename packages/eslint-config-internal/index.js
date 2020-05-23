@@ -20,8 +20,6 @@ module.exports = {
     ].map(require.resolve),
   ],
   env: {
-    browser: true,
-    node: true,
     jest: true,
     es2020: true,
   },
