@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server for the offline first TODO app",
+  "main": "index.js",
+  "author": "Dmitry Shuvalov <iamshuvalov@yandex.ru>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "babel:node": "babel-node --config-file ./.babelrc.json",
+    "lint": "yarn eslint ./src/",
+    "start": "nodemon --exec yarn babel:node ./src/index.js"
+  },
+  "dependencies": {
+    "@koa/router": "^8.0.8",
+    "koa": "^2.12.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-logger": "^3.2.1",
+    "mongodb": "^3.5.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-flow": "^7.9.0",
+    "eslint": "^6.8.0",
+    "eslint-config-internal": "^1.0.0",
+    "nodemon": "^2.0.4"
+  }
+}
