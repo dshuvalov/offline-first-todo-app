@@ -7,7 +7,7 @@ import {
   SET_TODO_TASKS,
   CHANGE_TODO_TASK,
   // REMOVE_TODO_TASK,
-} from '../../actions'
+} from '../../actions/todoTasks'
 import { pushValueByPath, changeValueByPath } from './utils'
 import { GlobalStateProviderContext } from './GlobalStateProviderContext'
 import type {
