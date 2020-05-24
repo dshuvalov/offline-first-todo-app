@@ -2,9 +2,14 @@
 
 import React, { useReducer } from 'react'
 
+import {
+  ADD_TODO_TASK,
+  SET_TODO_TASKS,
+  CHANGE_TODO_TASK,
+  // REMOVE_TODO_TASK,
+} from '../../actions'
 import { pushValueByPath, changeValueByPath } from './utils'
 import { GlobalStateProviderContext } from './GlobalStateProviderContext'
-import { ADD_TODO_TASK, SET_TODO_TASKS } from './actionTypes/todoTasks'
 import type {
   GlobalStateProviderState,
   GlobalStateProviderActions,
@@ -26,6 +31,11 @@ const reducer = (state, action) => {
     }
     case ADD_TODO_TASK: {
       const newState = pushValueByPath(state, ['todoTasks'], action.payload)
+      return { ...newState }
+    }
+    case CHANGE_TODO_TASK: {
+      const { pathToValue, value } = action.payload
+      const newState = changeValueByPath(state, ['todoTasks', ...pathToValue], value)
       return { ...newState }
     }
     default:

@@ -3,11 +3,8 @@
 import React, { Fragment, useState, useCallback, useMemo } from 'react'
 // $FlowFixMe
 import { nanoid } from 'nanoid'
-import {
-  useGlobalStateProvider,
-  type TodoTask,
-  addTodoTask,
-} from '../../controllers/GlobalStateProvider'
+import { useGlobalStateProvider, type TodoTask } from '../../controllers/GlobalStateProvider'
+import { addTodoTask } from '../../actions'
 import { Input } from '../../components/Input'
 import { TodoListItem } from './TodoListItem'
 
@@ -20,6 +17,10 @@ const generateTodoTask = (title, orderNumber): TodoTask => {
     description: '',
     orderNumber,
     isCompleted: false,
+    meta: {
+      isSynchronized: false,
+      reason: 'create',
+    },
   }
 }
 
@@ -27,8 +28,8 @@ export const TodoList = React.memo<null>(function TodoList() {
   const [newTodoTitle, setNewTodoTitle] = useState<string>('')
   const { state, dispatch } = useGlobalStateProvider()
 
-  const todoTasks = useMemo(() => state.todoTasks, [state])
-  const todoTasksCount = useMemo(() => todoTasks.length, [todoTasks])
+  const todoTasks = useMemo(() => state.todoTasks, [state.todoTasks])
+  const todoTasksCount = useMemo(() => todoTasks.length, [todoTasks.length])
 
   const handleChangeTodoTitle = useCallback(event => {
     const { value } = event.target

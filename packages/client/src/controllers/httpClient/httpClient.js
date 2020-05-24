@@ -44,7 +44,7 @@ class HttpClient {
       .then(mapToSuccess)
       .catch(response => {
         const errorResponse = mapToError(response)
-        throw errorResponse
+        return errorResponse
       })
   }
 
