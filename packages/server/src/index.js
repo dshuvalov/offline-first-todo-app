@@ -55,4 +55,21 @@ router.post('/task', async function (ctx: AppContext) {
   }
 })
 
+router.delete('/task', async function (ctx: AppContext) {
+  try {
+    const { request } = ctx
+    // $FlowFixMe
+    await ctx.app.mongo.collection('Tasks').deleteOne({ id: request.body.todoTaskId })
+
+    ctx.type = 'json'
+    ctx.status = 200
+    ctx.body = { message: 'Task was successfully deleted' }
+  } catch (error) {
+    console.log('POST:/task', error)
+    ctx.type = 'json'
+    ctx.status = error.status || 500
+    ctx.body = { message: 'Internal Server Error' }
+  }
+})
+
 connect(app).then(() => app.listen(8080))
