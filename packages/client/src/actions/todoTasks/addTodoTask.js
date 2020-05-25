@@ -22,14 +22,13 @@ export const addTodoTask = async (
 
     if (idbPushResponse.status === 'success') {
       dispatch({ type: ADD_TODO_TASK, payload: todoTask })
+      toast.success('Task was successfully created')
     }
 
     const { meta, ...body } = todoTask
     const fetchResponse = await httpClient.post('/task', { body })
 
     if (fetchResponse.status === 200) {
-      toast.success('Task was successfully created')
-
       const synchronizedTodoTask = {
         ...todoTask,
         meta: { ...todoTask.meta, isSynchronized: true },
