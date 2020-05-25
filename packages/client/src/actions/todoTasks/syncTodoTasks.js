@@ -46,7 +46,7 @@ const syncCreatedTodoTasks = async (
     const syncCreatedTasks: Array<TodoTask> = []
     const unSyncCreatedTasks: Array<TodoTask> = []
 
-    // Generate list of successfully synchronized tasks
+    // Generate list of successfully and unsuccessfully synchronized tasks
     createdTasksResponses.forEach((response, index) => {
       if (response && response.status === 200) {
         const todoTask = {
@@ -71,6 +71,45 @@ const syncCreatedTodoTasks = async (
   }
 }
 
+const syncDeletedTodoTasks = async (unSyncDeletedTodoTasks: Array<TodoTask>) => {
+  const { deleteIDBValue } = idb
+
+  try {
+    // Synchronize tasks with backend
+    const createdTasksResponses = await Promise.all(
+      unSyncDeletedTodoTasks.map(todoTask =>
+        httpClient.delete('/task', { body: { todoTaskId: todoTask.id } }),
+      ),
+    )
+
+    const syncDeletedTasks: Array<TodoTask> = []
+    const unSyncDeletedTasks: Array<TodoTask> = []
+
+    // Generate list of successfully and unsuccessfully synchronized tasks
+    createdTasksResponses.forEach((response, index) => {
+      if (response && response.status === 200) {
+        const todoTask = {
+          ...unSyncDeletedTodoTasks[index],
+          meta: { reason: 'delete', isSynchronized: true },
+        }
+        syncDeletedTasks.push(todoTask)
+        return
+      }
+
+      const todoTask = unSyncDeletedTasks[index]
+      unSyncDeletedTasks.push(todoTask)
+    })
+
+    // Remove successfully synchronized tasks from Indexed Database
+    await Promise.all(syncDeletedTasks.map(syncTask => deleteIDBValue('TodoTasks', syncTask.id)))
+
+    return [...syncDeletedTasks, ...unSyncDeletedTasks]
+  } catch (error) {
+    toast.error('Error')
+    throw error
+  }
+}
+
 export const syncTodoTasks = async (
   todoTasks: Array<TodoTask>,
   dispatch: Dispatch<FetchTodoTasksAction | SetTodoTasksAction>,
@@ -78,16 +117,21 @@ export const syncTodoTasks = async (
   try {
     toast.info('You have unsaved task. They will be synchronized to the server at the background')
     const unSyncCreatedTodoTasks: Array<TodoTask> = []
+    const unSyncDeletedTodoTasks = []
     // const unSyncUpdatedTodoTasks = []
-    // const unSyncDeletedTodoTasks = []
 
     todoTasks.forEach(task => {
       if (task.meta.reason === 'create' && !task.meta.isSynchronized) {
         unSyncCreatedTodoTasks.push(task)
       }
+      if (task.meta.reason === 'delete' && !task.meta.isSynchronized) {
+        unSyncDeletedTodoTasks.push(task)
+      }
     })
 
     const synchronizedCreatedTodoTasks = await syncCreatedTodoTasks(unSyncCreatedTodoTasks)
+    const synchronizedDeletedTodoTasks = await syncDeletedTodoTasks(unSyncDeletedTodoTasks)
+
     const newTodoTasks: Array<TodoTask> = todoTasks.reduce((accum, todoTask) => {
       const { id } = todoTask
 
@@ -96,13 +140,22 @@ export const syncTodoTasks = async (
         return [...accum, { ...synchronizedCreatedTodoTask }]
       }
 
+      const synchronizedDeletedTodoTask = findTodoTaskById(synchronizedDeletedTodoTasks, id)
+      if (synchronizedDeletedTodoTask && !synchronizedDeletedTodoTask.meta.isSynchronized) {
+        return [...accum, { ...synchronizedDeletedTodoTask }]
+      } else if (synchronizedDeletedTodoTask && synchronizedDeletedTodoTask.meta.isSynchronized) {
+        return [...accum]
+      }
+
       return [...accum, { ...todoTask }]
     }, [])
+    console.log('beforeSync', todoTasks)
     console.log(
-      'beforeSynced',
+      'already sync',
       todoTasks.filter(task => task.meta.isSynchronized),
     )
     console.log('syncCreatedTasks', synchronizedCreatedTodoTasks)
+    console.log('syncDeletedTasks', synchronizedDeletedTodoTasks)
     console.log('after sync', newTodoTasks)
 
     return dispatch({ type: SET_TODO_TASKS, payload: newTodoTasks.sort(sortByOrderNumber) })
