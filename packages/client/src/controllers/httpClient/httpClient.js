@@ -63,6 +63,18 @@ class HttpClient {
       body: body ? JSON.stringify(body) : null,
     })
   }
+
+  delete = (url: string, { headers, body }: { headers?: HeadersInit, body: mixed }) => {
+    const defaultHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+    return this._fetchFromApi(url, {
+      method: 'delete',
+      headers: { ...headers, ...defaultHeaders },
+      body: body ? JSON.stringify(body) : null,
+    })
+  }
 }
 
 export const httpClient = new HttpClient()

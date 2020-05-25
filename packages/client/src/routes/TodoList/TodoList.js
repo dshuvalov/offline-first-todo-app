@@ -4,7 +4,7 @@ import React, { Fragment, useState, useCallback, useMemo } from 'react'
 // $FlowFixMe
 import { nanoid } from 'nanoid'
 import { useGlobalStateProvider, type TodoTask } from '../../controllers/GlobalStateProvider'
-import { addTodoTask } from '../../actions'
+import { addTodoTask, removeTodoTask } from '../../actions'
 import { Input } from '../../components/Input'
 import { TodoListItem } from './TodoListItem'
 
@@ -26,10 +26,21 @@ const generateTodoTask = (title, orderNumber): TodoTask => {
 
 export const TodoList = React.memo<null>(function TodoList() {
   const [newTodoTitle, setNewTodoTitle] = useState<string>('')
-  const { state, dispatch } = useGlobalStateProvider()
+  const {
+    state,
+    state: { todoTasks },
+    dispatch,
+  } = useGlobalStateProvider()
 
-  const todoTasks = useMemo(() => state.todoTasks, [state.todoTasks])
-  const todoTasksCount = useMemo(() => todoTasks.length, [todoTasks.length])
+  const lastOrderNumber = useMemo(() => {
+    const todoTasksCount = state.todoTasks.length
+    const lastTask = state.todoTasks[todoTasksCount - 1]
+
+    if (lastTask) {
+      return lastTask.orderNumber + 1
+    }
+    return todoTasksCount
+  }, [state])
 
   const handleChangeTodoTitle = useCallback(event => {
     const { value } = event.target
@@ -40,12 +51,19 @@ export const TodoList = React.memo<null>(function TodoList() {
     event => {
       const trimmedNewTodoTitle = String(newTodoTitle).trim()
       if (event.which === 13 && trimmedNewTodoTitle.length !== 0) {
-        const newTodoTask = generateTodoTask(trimmedNewTodoTitle, todoTasksCount)
+        const newTodoTask = generateTodoTask(trimmedNewTodoTitle, lastOrderNumber)
         setNewTodoTitle('')
         addTodoTask(newTodoTask, dispatch)
       }
     },
-    [dispatch, newTodoTitle, todoTasksCount],
+    [dispatch, newTodoTitle, lastOrderNumber],
+  )
+
+  const handleRemoveTodoTask = useCallback(
+    (todoTask: TodoTask) => {
+      removeTodoTask(todoTask, dispatch)
+    },
+    [dispatch],
   )
 
   return (
@@ -61,14 +79,8 @@ export const TodoList = React.memo<null>(function TodoList() {
       </header>
       <main className="TodoList__main">
         <ul className="TodoList__list">
-          {todoTasks.map((todo, index) => (
-            <TodoListItem
-              key={todo.id}
-              id={todo.id}
-              index={index}
-              todoTitle={todo.title}
-              isTodoCompleted={todo.isCompleted}
-            />
+          {todoTasks.map(todo => (
+            <TodoListItem key={todo.id} todo={todo} removeTodoTask={handleRemoveTodoTask} />
           ))}
         </ul>
       </main>

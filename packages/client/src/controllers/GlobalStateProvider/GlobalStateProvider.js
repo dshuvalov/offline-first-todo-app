@@ -6,9 +6,9 @@ import {
   ADD_TODO_TASK,
   SET_TODO_TASKS,
   CHANGE_TODO_TASK,
-  // REMOVE_TODO_TASK,
+  REMOVE_TODO_TASK,
 } from '../../actions/todoTasks'
-import { pushValueByPath, changeValueByPath } from './utils'
+import { pushValueByPath, changeValueByPath, removeValueByPath } from './utils'
 import { GlobalStateProviderContext } from './GlobalStateProviderContext'
 import type {
   GlobalStateProviderState,
@@ -37,6 +37,18 @@ const reducer = (state, action) => {
       const { pathToValue, value } = action.payload
       const newState = changeValueByPath(state, ['todoTasks', ...pathToValue], value)
       return { ...newState }
+    }
+    case REMOVE_TODO_TASK: {
+      const { todoTaskRemovableId } = action.payload
+      const todoTaskRemovableIndex = state.todoTasks
+        .map(todoTask => todoTask.id)
+        .indexOf(todoTaskRemovableId)
+
+      if (todoTaskRemovableIndex !== -1) {
+        const newState = removeValueByPath(state, ['todoTasks'], todoTaskRemovableIndex)
+        return { ...newState }
+      }
+      return state
     }
     default:
       return state

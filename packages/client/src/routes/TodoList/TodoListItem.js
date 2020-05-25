@@ -1,12 +1,11 @@
 // @flow
 
-import React from 'react'
+import React, { useCallback } from 'react'
+import { type TodoTask } from '../../controllers/GlobalStateProvider'
 
 type Props = {|
-  id: string,
-  todoTitle: string,
-  index: number,
-  isTodoCompleted: boolean,
+  todo: TodoTask,
+  removeTodoTask: (todoTask: TodoTask) => void,
 |}
 
 export const TodoListItem = React.memo<Props>(function TodoListItem(props) {
@@ -25,20 +24,20 @@ export const TodoListItem = React.memo<Props>(function TodoListItem(props) {
   //       reasons: ['completeTodo'],
   //     })
   //   }
+  const handleRemoveTodoTask = useCallback(() => {
+    props.removeTodoTask(props.todo)
+  }, [props])
 
   return (
     <li>
       <input
         className="TodoList__item-toggle"
         type="checkbox"
-        checked={props.isTodoCompleted}
-        // onChange={this.handleCompleteTodo.bind(this, todo)}
+        checked={props.todo.isCompleted}
+        onChange={() => {}}
       />
-      <div className="TodoList__item-title">{props.todoTitle}</div>
-      <button
-        className="TodoList__item-remove"
-        // onClick={() => props.removeTodo({ todoId: props.id, todoIndex: props.index })}
-      />
+      <div className="TodoList__item-title">{props.todo.title}</div>
+      <button className="TodoList__item-remove" onClick={handleRemoveTodoTask} />
     </li>
   )
 })

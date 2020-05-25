@@ -15,7 +15,10 @@ type ChangeTodoTaskAction = ActionGeneric<
   '@todos/CHANGE_TODO_TASK',
   {| pathToValue: $ReadOnlyArray<string | number>, value: mixed |},
 >
-type RemoveTodoTaskAction = ActionGeneric<'@todos/REMOVE_TODO_TASK', {| todoTaskIndex: number |}>
+type RemoveTodoTaskAction = ActionGeneric<
+  '@todos/REMOVE_TODO_TASK',
+  {| todoTaskRemovableId: string |},
+>
 
 type GlobalStateProviderActions =
   | FetchTodoTasksAction

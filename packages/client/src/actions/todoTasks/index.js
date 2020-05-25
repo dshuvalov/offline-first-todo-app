@@ -9,3 +9,4 @@ export {
   CHANGE_TODO_TASK,
   REMOVE_TODO_TASK,
 } from './actionTypes'
+export { removeTodoTask } from './removeTodoTask'
