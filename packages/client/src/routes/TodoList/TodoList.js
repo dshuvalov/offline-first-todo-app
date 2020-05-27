@@ -1,28 +1,12 @@
 // @flow
 
 import React, { Fragment, useState, useCallback, useMemo } from 'react'
-// $FlowFixMe
-import { nanoid } from 'nanoid'
 import { useGlobalStateProvider, type TodoTask } from '../../controllers/GlobalStateProvider'
 import { addTodoTask, removeTodoTask, changeTodoTask } from '../../actions'
 import { Input } from '../../components/Input'
 import { TodoListItem } from './TodoListItem'
-
+import { generateTodoTask } from './generateTodoTask'
 import './TodoList.css'
-
-const generateTodoTask = (title, orderNumber): TodoTask => {
-  return {
-    id: nanoid(),
-    title,
-    description: '',
-    orderNumber,
-    isCompleted: false,
-    meta: {
-      isSynchronized: false,
-      reason: 'create',
-    },
-  }
-}
 
 export const TodoList = React.memo<null>(function TodoList() {
   const [newTodoTitle, setNewTodoTitle] = useState<string>('')
