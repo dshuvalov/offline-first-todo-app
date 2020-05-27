@@ -34,6 +34,11 @@ function mapToError(response: Response): ErrorResponse {
   }
 }
 
+const defaultHeaders = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+}
+
 class HttpClient {
   _fetchFromApi = (path: string, options: RequestOptions) => {
     return fetch(`${apiUrl}${path}`, {
@@ -53,10 +58,6 @@ class HttpClient {
   }
 
   post = (url: string, { headers, body }: { headers?: HeadersInit, body: mixed }) => {
-    const defaultHeaders = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }
     return this._fetchFromApi(url, {
       method: 'post',
       headers: { ...headers, ...defaultHeaders },
@@ -65,12 +66,16 @@ class HttpClient {
   }
 
   delete = (url: string, { headers, body }: { headers?: HeadersInit, body: mixed }) => {
-    const defaultHeaders = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }
     return this._fetchFromApi(url, {
       method: 'delete',
+      headers: { ...headers, ...defaultHeaders },
+      body: body ? JSON.stringify(body) : null,
+    })
+  }
+
+  put = (url: string, { headers, body }: { headers?: HeadersInit, body: mixed }) => {
+    return this._fetchFromApi(url, {
+      method: 'put',
       headers: { ...headers, ...defaultHeaders },
       body: body ? JSON.stringify(body) : null,
     })
