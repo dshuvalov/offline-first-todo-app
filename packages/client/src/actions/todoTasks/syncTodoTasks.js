@@ -78,7 +78,7 @@ const syncDeletedTodoTasks = async (unSyncDeletedTodoTasks: Array<TodoTask>) => 
     // Synchronize tasks with backend
     const createdTasksResponses = await Promise.all(
       unSyncDeletedTodoTasks.map(todoTask =>
-        httpClient.delete('/task', { body: { todoTaskId: todoTask.id } }),
+        httpClient.delete('/task', { body: { id: todoTask.id } }),
       ),
     )
 

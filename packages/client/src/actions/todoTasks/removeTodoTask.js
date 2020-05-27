@@ -45,7 +45,7 @@ export const removeTodoTask = async (
       toast.success('Task was successfully deleted')
     }
 
-    const fetchResponse = await httpClient.delete('/task', { body: { todoTaskId: todoTask.id } })
+    const fetchResponse = await httpClient.delete('/task', { body: { id: todoTask.id } })
 
     if (fetchResponse.status === 200) {
       deleteIDBValue('TodoTasks', todoTask.id)
