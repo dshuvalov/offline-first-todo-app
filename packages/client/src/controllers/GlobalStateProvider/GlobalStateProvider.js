@@ -34,9 +34,14 @@ const reducer = (state, action) => {
       return { ...newState }
     }
     case CHANGE_TODO_TASK: {
-      const { pathToValue, value } = action.payload
-      const newState = changeValueByPath(state, ['todoTasks', ...pathToValue], value)
-      return { ...newState }
+      const { todoTaskId, value } = action.payload
+      const todoTaskIndex = state.todoTasks.map(todoTask => todoTask.id).indexOf(todoTaskId)
+
+      if (todoTaskIndex !== -1) {
+        const newState = changeValueByPath(state, ['todoTasks', todoTaskIndex], value)
+        return { ...newState }
+      }
+      return state
     }
     case REMOVE_TODO_TASK: {
       const { todoTaskRemovableId } = action.payload

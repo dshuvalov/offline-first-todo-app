@@ -40,7 +40,7 @@ export const addTodoTask = async (
         dispatch({
           type: CHANGE_TODO_TASK,
           payload: {
-            pathToValue: [synchronizedTodoTask.orderNumber],
+            todoTaskId: todoTask.id,
             value: synchronizedTodoTask,
           },
         })

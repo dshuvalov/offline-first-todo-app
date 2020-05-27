@@ -13,7 +13,7 @@ type SetTodoTasksAction = ActionGeneric<'@todos/SET_TODO_TASKS', Array<TodoTask>
 type AddTodoTaskAction = ActionGeneric<'@todos/ADD_TODO_TASK', TodoTask>
 type ChangeTodoTaskAction = ActionGeneric<
   '@todos/CHANGE_TODO_TASK',
-  {| pathToValue: $ReadOnlyArray<string | number>, value: mixed |},
+  {| todoTaskId: string, value: TodoTask |},
 >
 type RemoveTodoTaskAction = ActionGeneric<
   '@todos/REMOVE_TODO_TASK',
