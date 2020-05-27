@@ -10,7 +10,6 @@ import { fetchTodoTasks } from '../actions'
 import { TodoList } from '../routes/TodoList'
 
 import './App.css'
-// import logo from './logo.svg'
 
 const DependentProviders = () => {
   const { dispatch } = useGlobalStateProvider()
