@@ -4,7 +4,7 @@ import React, { Fragment, useState, useCallback, useMemo } from 'react'
 // $FlowFixMe
 import { nanoid } from 'nanoid'
 import { useGlobalStateProvider, type TodoTask } from '../../controllers/GlobalStateProvider'
-import { addTodoTask, removeTodoTask } from '../../actions'
+import { addTodoTask, removeTodoTask, changeTodoTask } from '../../actions'
 import { Input } from '../../components/Input'
 import { TodoListItem } from './TodoListItem'
 
@@ -66,6 +66,13 @@ export const TodoList = React.memo<null>(function TodoList() {
     [dispatch],
   )
 
+  const handleCompleteTodoTask = useCallback(
+    (todoTask: TodoTask, isCompleted: boolean) => {
+      changeTodoTask({ ...todoTask, isCompleted }, dispatch)
+    },
+    [dispatch],
+  )
+
   return (
     <Fragment>
       <header className="TodoList__header">
@@ -80,7 +87,12 @@ export const TodoList = React.memo<null>(function TodoList() {
       <main className="TodoList__main">
         <ul className="TodoList__list">
           {todoTasks.map(todo => (
-            <TodoListItem key={todo.id} todo={todo} removeTodoTask={handleRemoveTodoTask} />
+            <TodoListItem
+              key={todo.id}
+              todo={todo}
+              removeTodoTask={handleRemoveTodoTask}
+              completeTodoTask={handleCompleteTodoTask}
+            />
           ))}
         </ul>
       </main>
