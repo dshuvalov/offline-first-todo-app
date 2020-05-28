@@ -26,6 +26,7 @@ export const changeTodoTask = async (
           payload: { todoTaskId: todoTask.id, value: todoTask },
         })
       }
+      toast.success('Task successfully updated')
       return
     }
 
@@ -41,6 +42,7 @@ export const changeTodoTask = async (
         type: CHANGE_TODO_TASK,
         payload: { todoTaskId: todoTask.id, value: unSynchronizedTodoTask },
       })
+      toast.success('Task successfully updated')
     }
 
     const { meta, ...body } = todoTask
