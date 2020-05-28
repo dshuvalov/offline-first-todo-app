@@ -33,6 +33,11 @@ body {
   font-weight: 300;
 }
 
+a {
+  color: #111111;
+  text-decoration: none;
+}
+
 :focus {
   outline: 0;
 }

@@ -2,9 +2,14 @@
 
 import React, { useReducer } from 'react'
 
-import { pushValueByPath, changeValueByPath } from './utils'
+import {
+  ADD_TODO_TASK,
+  SET_TODO_TASKS,
+  CHANGE_TODO_TASK,
+  REMOVE_TODO_TASK,
+} from '../../actions/todoTasks'
+import { pushValueByPath, changeValueByPath, removeValueByPath } from './utils'
 import { GlobalStateProviderContext } from './GlobalStateProviderContext'
-import { ADD_TODO_TASK, SET_TODO_TASKS } from './actionTypes/todoTasks'
 import type {
   GlobalStateProviderState,
   GlobalStateProviderActions,
@@ -27,6 +32,28 @@ const reducer = (state, action) => {
     case ADD_TODO_TASK: {
       const newState = pushValueByPath(state, ['todoTasks'], action.payload)
       return { ...newState }
+    }
+    case CHANGE_TODO_TASK: {
+      const { todoTaskId, value } = action.payload
+      const todoTaskIndex = state.todoTasks.map(todoTask => todoTask.id).indexOf(todoTaskId)
+
+      if (todoTaskIndex !== -1) {
+        const newState = changeValueByPath(state, ['todoTasks', todoTaskIndex], value)
+        return { ...newState }
+      }
+      return state
+    }
+    case REMOVE_TODO_TASK: {
+      const { todoTaskRemovableId } = action.payload
+      const todoTaskRemovableIndex = state.todoTasks
+        .map(todoTask => todoTask.id)
+        .indexOf(todoTaskRemovableId)
+
+      if (todoTaskRemovableIndex !== -1) {
+        const newState = removeValueByPath(state, ['todoTasks'], todoTaskRemovableIndex)
+        return { ...newState }
+      }
+      return state
     }
     default:
       return state

@@ -14,4 +14,4 @@ type AppContext = {
   app: App,
 }
 
-export type { App, AppContext }
+export type { AppContext }

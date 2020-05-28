@@ -2,15 +2,15 @@
 
 import React, { Fragment, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { idb } from '../controllers/idb'
-import {
-  GlobalStateProvider,
-  useGlobalStateProvider,
-  fetchTodoTasks,
-} from '../controllers/GlobalStateProvider'
-
+import { GlobalStateProvider, useGlobalStateProvider } from '../controllers/GlobalStateProvider'
+import { fetchTodoTasks } from '../actions'
 import { TodoList } from '../routes/TodoList'
-// import logo from './logo.svg'
+import { TodoTask } from '../routes/TodoTask'
+
+import './App.css'
 
 const DependentProviders = () => {
   const { dispatch } = useGlobalStateProvider()
@@ -25,6 +25,7 @@ const DependentProviders = () => {
   return (
     <Switch>
       <Route exact path="/" component={TodoList} />
+      <Route path="/task/:taskId" component={TodoTask} />
     </Switch>
   )
 }
@@ -36,6 +37,17 @@ const App = () => {
       <Router>
         <GlobalStateProvider>
           <DependentProviders />
+          <ToastContainer
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            rtl={false}
+          />
         </GlobalStateProvider>
       </Router>
     </Fragment>
