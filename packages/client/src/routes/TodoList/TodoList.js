@@ -1,10 +1,10 @@
 // @flow
 
 import React, { Fragment, useState, useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useGlobalStateProvider, type TodoTask } from '../../controllers/GlobalStateProvider'
 import { addTodoTask, removeTodoTask, changeTodoTask } from '../../actions'
 import { Input } from '../../components/Input'
-import { TodoListItem } from './TodoListItem'
 import { generateTodoTask } from './generateTodoTask'
 import './TodoList.css'
 
@@ -43,16 +43,17 @@ export const TodoList = React.memo<null>(function TodoList() {
     [dispatch, newTodoTitle, lastOrderNumber],
   )
 
-  const handleRemoveTodoTask = useCallback(
-    (todoTask: TodoTask) => {
-      removeTodoTask(todoTask, dispatch)
+  const handleCompleteTodoTask = useCallback(
+    (todoTask: TodoTask) => (event: SyntheticInputEvent<HTMLInputElement>) => {
+      const isChecked = event.target.checked
+      changeTodoTask({ ...todoTask, isCompleted: isChecked }, dispatch)
     },
     [dispatch],
   )
 
-  const handleCompleteTodoTask = useCallback(
-    (todoTask: TodoTask, isCompleted: boolean) => {
-      changeTodoTask({ ...todoTask, isCompleted }, dispatch)
+  const handleRemoveTodoTask = useCallback(
+    (todoTask: TodoTask) => () => {
+      removeTodoTask(todoTask, dispatch)
     },
     [dispatch],
   )
@@ -70,14 +71,22 @@ export const TodoList = React.memo<null>(function TodoList() {
       </header>
       <main className="TodoList__main">
         <ul className="TodoList__list">
-          {todoTasks.map(todo => (
-            <TodoListItem
-              key={todo.id}
-              todo={todo}
-              removeTodoTask={handleRemoveTodoTask}
-              completeTodoTask={handleCompleteTodoTask}
-            />
-          ))}
+          {todoTasks.map(todo => {
+            return (
+              <li key={todo.id}>
+                <input
+                  className="TodoList__item-toggle"
+                  type="checkbox"
+                  checked={todo.isCompleted}
+                  onChange={handleCompleteTodoTask(todo)}
+                />
+                <Link to={`/task/${todo.id}`} className="TodoList__item-title">
+                  {todo.title}
+                </Link>
+                <button className="TodoList__item-remove" onClick={handleRemoveTodoTask(todo)} />
+              </li>
+            )
+          })}
         </ul>
       </main>
     </Fragment>
