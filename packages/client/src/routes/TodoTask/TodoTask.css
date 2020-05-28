@@ -1,0 +1,71 @@
+.TodoTask__block {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.TodoTask__input {
+  width: 80%;
+  flex-grow: 1;
+  margin-bottom: 16px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  outline: 0;
+  font-size: 22px;
+  font-weight: 500;
+  transition: border 0.3s;
+  box-sizing: border-box;
+}
+
+.TodoTask__input:focus {
+  border: 2px solid rgb(196, 196, 196);
+}
+
+.TodoTask__exit-icon {
+  width: 24px;
+  height: 24px;
+  position: absolute !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  right: 15px;
+  top: 15px;
+  font-size: 24px;
+  text-decoration: none;
+  z-index: 10;
+}
+
+.TodoTask__exit-icon:after {
+  content: 'X';
+}
+
+.TodoTask__textarea {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px;
+  border: 2px solid #e5e5e5;
+  border-radius: 5px;
+  background: transparent;
+  outline: 0;
+  font-size: 18px;
+  font-family: inherit;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.TodoTask__textarea:focus {
+  border-color: rgb(196, 196, 196);
+}
+
+.TodoTask__save-button {
+  width: 80px;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #16293f;
+  cursor: pointer;
+}
